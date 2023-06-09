@@ -3,7 +3,7 @@
 function App() {
   return (
     <div className="App">
-      App
+      App 2
     </div>
   );
 }
