@@ -1,17 +1,23 @@
 const { StatusCodes } = require("http-status-codes");
+const Product = require("../models/product");
 
 const getAllProducts = async (req, res) => {
-  res.send("all products");
+  //populate data from another collection
+  const products = await Product.find({}).populate({
+    path: "category",
+    options: { lean: false },
+  });
+  res.status(StatusCodes.OK).json({ products, total: products.length });
 };
 
 const getProduct = async (req, res) => {
-    console.log(res)
-    console.log(req)
   res.send("single product");
 };
 
 const createProduct = async (req, res) => {
-  res.send("create product");
+  // req.body.createdBy = req.user.userId
+  const product = await Product.create(req.body);
+  res.status(StatusCodes.CREATED).json({ product });
 };
 
 const updateProduct = async (req, res) => {
