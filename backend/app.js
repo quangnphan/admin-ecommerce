@@ -1,4 +1,5 @@
 require("dotenv").config();
+require("express-async-errors");
 
 const cors = require("cors");
 
@@ -8,6 +9,7 @@ const app = express();
 const connectToDb = require("./db/connect");
 
 //routers
+const productsRouter = require("./routes/products");
 
 //app
 app.use(express.json());
@@ -17,7 +19,7 @@ app.get("/", (req, res) => {
 });
 
 //routes
-
+app.use("/api/ecom", productsRouter);
 
 const port = process.env.PORT || 5000;
 
