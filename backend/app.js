@@ -10,6 +10,7 @@ const connectToDb = require("./db/connect");
 
 //routers
 const productsRouter = require("./routes/products");
+const cateRouter = require("./routes/categories");
 
 //app
 app.use(express.json());
@@ -20,6 +21,7 @@ app.get("/", (req, res) => {
 
 //routes
 app.use("/api/ecom", productsRouter);
+app.use("/api/ecom", cateRouter);
 
 const port = process.env.PORT || 5000;
 
