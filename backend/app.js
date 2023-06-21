@@ -12,6 +12,9 @@ const connectToDb = require("./db/connect");
 const productsRouter = require("./routes/products");
 const cateRouter = require("./routes/categories");
 
+//errorhandler
+const notFound = require('./middleware/not-found')
+
 //app
 app.use(express.json());
 app.use(cors());
@@ -22,6 +25,7 @@ app.get("/", (req, res) => {
 //routes
 app.use("/api/ecom", productsRouter);
 app.use("/api/ecom", cateRouter);
+app.use(notFound);
 
 const port = process.env.PORT || 5000;
 
