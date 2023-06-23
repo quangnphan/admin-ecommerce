@@ -7,13 +7,14 @@ const express = require("express");
 const app = express();
 
 const connectToDb = require("./db/connect");
+const authenUser = require("./middleware/authentication");
 
 //routers
+const authRouter = require("./routes/auth");
 const productsRouter = require("./routes/products");
-const cateRouter = require("./routes/categories");
 
 //errorhandler
-const notFound = require('./middleware/not-found')
+const notFound = require("./middleware/not-found");
 
 //app
 app.use(express.json());
@@ -23,8 +24,8 @@ app.get("/", (req, res) => {
 });
 
 //routes
-app.use("/api/ecom", productsRouter);
-app.use("/api/ecom", cateRouter);
+app.use("/api/auth", authRouter);
+app.use("/api/ecom", authenUser, productsRouter);
 app.use(notFound);
 
 const port = process.env.PORT || 5000;

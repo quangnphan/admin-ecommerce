@@ -7,6 +7,7 @@ const {
   updateProduct,
   getAllProducts,
   getProduct,
+  getCategories,
 } = require("../controllers/products");
 
 router.route("/products").post(createProduct).get(getAllProducts);
@@ -17,6 +18,6 @@ router
   .delete(deleteProduct)
   .patch(updateProduct);
 
+router.route("/categories").get(getCategories);
+
 module.exports = router;
-
-
