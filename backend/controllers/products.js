@@ -1,5 +1,12 @@
 const { StatusCodes } = require("http-status-codes");
 const Product = require("../models/product");
+const Category = require("../models/Category");
+
+const getCategories = async (req, res) => {
+  const categories = await Category.find({});
+  console.log(categories);
+  res.status(StatusCodes.OK).json({ categories, total: categories.length });
+};
 
 const getAllProducts = async (req, res) => {
   //populate data from another collection
@@ -11,7 +18,13 @@ const getAllProducts = async (req, res) => {
 };
 
 const getProduct = async (req, res) => {
-  res.send("single product");
+  const product = await Product.findOne({
+    _id: req.params.id,
+  });
+  if (!product) {
+    throw new Error(`No product found!`);
+  }
+  res.status(StatusCodes.OK).json({ product });
 };
 
 const createProduct = async (req, res) => {
@@ -25,7 +38,13 @@ const updateProduct = async (req, res) => {
 };
 
 const deleteProduct = async (req, res) => {
-  res.send("delete product");
+  const product = await Product.findByIdAndRemove({
+    _id: req.params.id,
+  });
+  if (!product) {
+    throw new Error(`No product found!`);
+  }
+  res.status(StatusCodes.OK).send();
 };
 
 module.exports = {
@@ -34,4 +53,5 @@ module.exports = {
   createProduct,
   updateProduct,
   deleteProduct,
+  getCategories,
 };
