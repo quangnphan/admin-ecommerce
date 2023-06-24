@@ -11,6 +11,17 @@ const storageOptionSchema = new mongoose.Schema({
   },
 });
 
+const sizeOptionSchema = new mongoose.Schema({
+  size: {
+    type: String,
+    required: true,
+  },
+  storages: {
+    type: [storageOptionSchema],
+    required: true,
+  },
+});
+
 const productSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -20,16 +31,16 @@ const productSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Category",
   },
-  size: {
-    type: [String],
-    required: [true, "size cannot be empty"],
+  sizes: {
+    type: [sizeOptionSchema],
+    required: [true, "sizes cannot be empty"],
   },
   color: {
     type: [String],
     required: true,
   },
-  storage: {
-    type: [storageOptionSchema],
+  description: {
+    type: [String],
     required: true,
   },
   created_at: {
