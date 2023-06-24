@@ -1,17 +1,24 @@
 const mongoose = require("mongoose");
 
+const storageOptionSchema = new mongoose.Schema({
+  capacity: {
+    type: String,
+    required: true,
+  },
+  price: {
+    type: Number,
+    required: true,
+  },
+});
+
 const productSchema = new mongoose.Schema({
   name: {
     type: String,
     required: [true, "product name must be provided"],
   },
-  price: {
-    type: Number,
-    required: [true, "product price must be provided"],
-  },
   category: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Category',
+    ref: "Category",
   },
   size: {
     type: [String],
@@ -22,16 +29,20 @@ const productSchema = new mongoose.Schema({
     required: true,
   },
   storage: {
-    type: [String],
+    type: [storageOptionSchema],
     required: true,
   },
   created_at: {
     type: Date,
-    default: Date.now(),
+    default: Date.now,
   },
   image: {
     type: [String],
-  }
+  },
+  created_by: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
 });
 
 module.exports = mongoose.model("Product", productSchema);

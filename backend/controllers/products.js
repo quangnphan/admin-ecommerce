@@ -1,10 +1,9 @@
 const { StatusCodes } = require("http-status-codes");
-const Product = require("../models/product");
-const Category = require("../models/Category");
+const Product = require("../models/Product");
+const Category = require('../models/Category');
 
 const getCategories = async (req, res) => {
   const categories = await Category.find({});
-  console.log(categories);
   res.status(StatusCodes.OK).json({ categories, total: categories.length });
 };
 
@@ -28,7 +27,7 @@ const getProduct = async (req, res) => {
 };
 
 const createProduct = async (req, res) => {
-  // req.body.createdBy = req.user.userId
+  req.body.createdBy = req.user.userId
   const product = await Product.create(req.body);
   res.status(StatusCodes.CREATED).json({ product });
 };
