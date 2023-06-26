@@ -47,6 +47,10 @@ const productSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  out_of_stock:{
+    type: Boolean,
+    required: true,
+  },
   image: {
     type: [String],
   },
@@ -54,6 +58,9 @@ const productSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
+  in_the_box: {
+    type: [String],
+}
 });
 
 module.exports = mongoose.model("Product", productSchema);
