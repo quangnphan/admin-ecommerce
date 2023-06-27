@@ -11,6 +11,17 @@ const storageOptionSchema = new mongoose.Schema({
   },
 });
 
+const colorSchema = new mongoose.Schema({
+  hex: {
+    type: String,
+    required: true,
+  },
+  des: {
+    type: String,
+    required: true,
+  },
+});
+
 const sizeOptionSchema = new mongoose.Schema({
   size: {
     type: String,
@@ -36,7 +47,7 @@ const productSchema = new mongoose.Schema({
     required: [true, "sizes cannot be empty"],
   },
   color: {
-    type: [String],
+    type: [colorSchema],
     required: true,
   },
   description: {
@@ -47,7 +58,7 @@ const productSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  out_of_stock:{
+  out_of_stock: {
     type: Boolean,
     required: true,
   },
@@ -60,7 +71,7 @@ const productSchema = new mongoose.Schema({
   },
   in_the_box: {
     type: [String],
-}
+  },
 });
 
 module.exports = mongoose.model("Product", productSchema);
