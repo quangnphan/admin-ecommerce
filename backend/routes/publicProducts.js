@@ -8,6 +8,8 @@ const {
 
 router.route("/products").get(getAllProducts);
 
+router.route("/products/:category?").get(getAllProducts);
+
 router
   .route("/product/:id")
   .get(getProduct)
