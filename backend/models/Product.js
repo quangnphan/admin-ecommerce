@@ -46,7 +46,7 @@ const productSchema = new mongoose.Schema({
     type: [sizeOptionSchema],
     required: [true, "sizes cannot be empty"],
   },
-  color: {
+  colors: {
     type: [colorSchema],
     required: true,
   },
