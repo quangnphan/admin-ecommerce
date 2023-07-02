@@ -13,6 +13,7 @@ const authenUser = require("./middleware/authentication");
 const authRouter = require("./routes/auth");
 const productsRouter = require("./routes/products");
 const publicProductsRouter = require("./routes/publicProducts");
+const orderRouter = require("./routes/orders");
 
 //errorhandler
 const notFound = require("./middleware/not-found");
@@ -21,13 +22,14 @@ const notFound = require("./middleware/not-found");
 app.use(express.json());
 app.use(cors());
 app.get("/", (req, res) => {
-  res.send("<h1>dasdsadas</h1>");
+  res.send("<h1>Backend Ecommerce</h1>");
 });
 
 //routes
 app.use("/api/auth", authRouter);
 app.use("/api/user", authenUser, productsRouter);
 app.use("/api/ecom", publicProductsRouter);
+app.use("/api/ecom", orderRouter);
 app.use(notFound);
 
 const port = process.env.PORT || 5000;
