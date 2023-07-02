@@ -23,15 +23,15 @@ const productSchema = new mongoose.Schema({
       type: [productSchema],
       required: true,
     },
-    totalAmount: {
+    total_amount: {
       type: Number,
       required: true,
     },
-    shippingAddress: {
+    shipping_address: {
       type: String,
       required: true,
     },
-    orderDate: {
+    order_date: {
       type: Date,
       default: Date.now,
     },
