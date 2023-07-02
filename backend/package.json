@@ -19,6 +19,7 @@
     "http-status-codes": "^2.2.0",
     "jsonwebtoken": "^9.0.0",
     "mongodb": "^5.6.0",
-    "mongoose": "^7.3.0"
+    "mongoose": "^7.3.0",
+    "stripe": "^12.11.0"
   }
 }
