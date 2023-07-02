@@ -5,12 +5,11 @@ const createPayment = require("../middleware/payment");
 
 const stripeAPI = stripe(process.env.STRIPE_SECRET_KEY);
 
-const postPayment = async (req, res, next) => {
+exports.postPayment = async (req, res, next) => {
   try {
     const { total } = req.body;
-    const amount = Math.round(total); // Round the total value to remove decimal places
 
-    const paymentIntent = await createPayment(stripeAPI, amount);
+    const paymentIntent = await createPayment(stripeAPI, total);
 
     res
       .status(StatusCodes.CREATED)
@@ -19,5 +18,3 @@ const postPayment = async (req, res, next) => {
     res.status(StatusCodes.BAD_REQUEST).json({ error: e.message });
   }
 };
-
-module.exports = postPayment;

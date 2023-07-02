@@ -1,7 +1,7 @@
 const createPayment = async (stripeAPI, amount) => {
   try {
     const paymentIntent = await stripeAPI.paymentIntents.create({
-      amount: amount * 100,
+      amount: (amount * 100).toFixed(0),
       currency: "usd",
     });
 
