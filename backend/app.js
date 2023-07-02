@@ -14,6 +14,7 @@ const authRouter = require("./routes/auth");
 const productsRouter = require("./routes/products");
 const publicProductsRouter = require("./routes/publicProducts");
 const orderRouter = require("./routes/orders");
+const paymentRouter = require('./routes/payment');
 
 //errorhandler
 const notFound = require("./middleware/not-found");
@@ -30,6 +31,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/user", authenUser, productsRouter);
 app.use("/api/ecom", publicProductsRouter);
 app.use("/api/ecom", orderRouter);
+app.use("/api/ecom", paymentRouter);
 app.use(notFound);
 
 const port = process.env.PORT || 5000;
