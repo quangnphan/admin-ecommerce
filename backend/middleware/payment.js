@@ -4,7 +4,6 @@ const createPayment = async (stripeAPI, amount) => {
       amount: (amount * 100).toFixed(0),
       currency: "usd",
     });
-
     return paymentIntent;
   } catch (e) {
     console.error(`Failure to create payment: ${e}`);
