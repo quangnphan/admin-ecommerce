@@ -1,5 +1,7 @@
 import "./styles/globals.css";
 import { Providers } from "@/redux/provider";
+import Navbar from "./components/Navbar";
+import Sidebar from "./components/Sidebar";
 
 export const metadata = {
   title: "Admin Dashboard",
@@ -10,7 +12,15 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <Providers>{children}</Providers>
+        <Providers>
+          <div style={{ display: "flex" }}>
+            <Sidebar />
+            <div style={{ flex: 1 }}>
+              <Navbar />
+              {children}
+            </div>
+          </div>
+        </Providers>
       </body>
     </html>
   );
