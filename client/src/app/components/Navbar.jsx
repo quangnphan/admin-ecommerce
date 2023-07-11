@@ -37,7 +37,7 @@ const Navbar = () => {
       sx={{
         position: "static",
         background: "none",
-        boxShadow: "none",
+
       }}
     >
       <Toolbar sx={{ justifyContent: "space-between" }}>

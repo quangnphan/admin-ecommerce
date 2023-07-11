@@ -10,7 +10,7 @@ import {
   ListItemIcon,
   ListItemText,
   Typography,
-  useMediaQuery
+  useMediaQuery,
 } from "@mui/material";
 import {
   ChevronRightOutlined,
@@ -30,7 +30,7 @@ const navItems = [
   {
     text: "Dashboard",
     icon: <HomeOutlined />,
-    path: "/dashboard",
+    path: "/",
   },
   {
     text: "Products",
@@ -80,7 +80,7 @@ const Sidebar = () => {
           <Box width="100%">
             <Box m="1.5rem 2rem 2rem 3rem">
               <div className="flex-between">
-                <Box display="flex" alignItems="center" gap="0.5rem">
+                <Box display="flex" alignItems="center">
                   <Typography variant="h4" fontWeight="bold">
                     ECOM
                   </Typography>
@@ -107,12 +107,18 @@ const Sidebar = () => {
                         }}
                         sx={{
                           backgroundColor:
-                            active === lcText ? "red" : "transparent",
-                          color: active === lcText ? "red" : "black",
-                          textDecoration: "none"
+                            active === lcText ? "#000000" : "transparent",
+                          color: active === lcText ? "#ffffff" : "#000000",
                         }}
                       >
-                        <ListItemIcon>{icon}</ListItemIcon>
+                        <ListItemIcon
+                          sx={{
+                            ml: "1rem",
+                            color: active === lcText ? "#ffffff" : "#000000",
+                          }}
+                        >
+                          {icon}
+                        </ListItemIcon>
                         <ListItemText primary={text} />
                         {active === lcText && (
                           <ChevronRightOutlined sx={{ ml: "auto" }} />
