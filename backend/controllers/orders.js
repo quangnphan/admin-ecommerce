@@ -21,6 +21,9 @@ const createOrder = async (req, res) => {
   // Create an array of product objects
   const productsArray = products.map((product) => ({
     product: product.productId,
+    size: product.modelId,
+    color: product.colorId,
+    storage: product.storageId,
     quantity: product.quantity,
   }));
 
