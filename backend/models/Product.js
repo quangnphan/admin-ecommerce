@@ -33,6 +33,17 @@ const sizeOptionSchema = new mongoose.Schema({
   },
 });
 
+const inTheBoxSchema = new mongoose.Schema({
+  item: {
+    type: String,
+    required: true,
+  },
+  image: {
+    type: String,
+    required: true,
+  },
+})
+
 const productSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -70,7 +81,8 @@ const productSchema = new mongoose.Schema({
     ref: "User",
   },
   in_the_box: {
-    type: [String],
+    type: [inTheBoxSchema],
+    required: true
   },
 });
 
