@@ -1,6 +1,4 @@
-"use client";
-
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Drawer,
@@ -10,7 +8,6 @@ import {
   ListItemIcon,
   ListItemText,
   Typography,
-  useMediaQuery,
 } from "@mui/material";
 import {
   ChevronRightOutlined,
@@ -21,10 +18,9 @@ import {
   AdminPanelSettingsOutlined,
   ReceiptOutlined,
 } from "@mui/icons-material";
-import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { close } from "../../redux/slices/layoutSlice";
-import Link from "next/link";
+import { close } from "../../features/layout/layoutSlice";
+import { NavLink } from "react-router-dom";
 
 const navItems = [
   {
@@ -60,8 +56,8 @@ const navItems = [
 ];
 
 const Sidebar = () => {
-  const isNonMobile = useMediaQuery("(min-width: 600px)");
-  const [active, setActive] = useState("");
+//   const isNonMobile = useMediaQuery("(min-width: 600px)");
+  const [active, setActive] = useState("dashboard");
   let isSidebarOpen = useSelector((state) => state.layout.visible);
   const dispatch = useDispatch();
 
@@ -100,11 +96,13 @@ const Sidebar = () => {
 
                 return (
                   <ListItem key={text} disablePadding>
-                    <Link href={path} passHref>
+                    <NavLink
+                      to={path}
+                      onClick={() => {
+                        setActive(lcText);
+                      }}
+                    >
                       <ListItemButton
-                        onClick={() => {
-                          setActive(lcText);
-                        }}
                         sx={{
                           backgroundColor:
                             active === lcText ? "#000000" : "transparent",
@@ -124,7 +122,7 @@ const Sidebar = () => {
                           <ChevronRightOutlined sx={{ ml: "auto" }} />
                         )}
                       </ListItemButton>
-                    </Link>
+                    </NavLink>
                   </ListItem>
                 );
               })}

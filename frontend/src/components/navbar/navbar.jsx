@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useState } from "react";
 import {
   Menu as MenuIcon,
@@ -22,7 +20,7 @@ import {
   MenuItem,
 } from "@mui/material";
 
-import { show, close } from "../../redux/slices/layoutSlice";
+import { show, close } from '../../features/layout/layoutSlice'
 
 const Navbar = () => {
   const dispatch = useDispatch();
@@ -37,7 +35,6 @@ const Navbar = () => {
       sx={{
         position: "static",
         background: "none",
-
       }}
     >
       <Toolbar sx={{ justifyContent: "space-between" }}>
