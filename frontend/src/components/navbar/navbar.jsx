@@ -22,13 +22,16 @@ import {
 
 import { show, close } from '../../features/layout/layoutSlice'
 
-const Navbar = () => {
+const Navbar = ({onLogout}) => {
   const dispatch = useDispatch();
   const isSidebarOpen = useSelector((state) => state.layout.visible);
   const [anchorEl, setAnchorEl] = useState(null);
   const isOpen = Boolean(anchorEl);
   const handleClick = (event) => setAnchorEl(event.currentTarget);
-  const handleClose = () => setAnchorEl(null);
+  const handleClose = () => {
+    setAnchorEl(null);
+    onLogout();
+  }
 
   return (
     <AppBar
