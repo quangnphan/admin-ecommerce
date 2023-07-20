@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -11,6 +11,11 @@ import Sidebar from "./components/sidebar/sidebar";
 import Dashboard from "./features/dashboard/Dashboard";
 import Products from "./features/products/Products";
 import Login from "./features/login/login";
+import Orders from "./features/orders/Orders";
+import Customers from "./features/customers/Customers";
+import Transactions from "./features/transactions/Transactions";
+import Admin from "./features/admin/Admin";
+import ErrorPage from "./components/error/404";
 
 function App() {
   return (
@@ -24,22 +29,13 @@ function WrapperComponents() {
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("token"));
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      setIsLoggedIn(true);
-      navigate("/");
-    } else {
-      setIsLoggedIn(false);
-    }
-  }, [navigate, isLoggedIn]);
-
   const handleLogin = (token) => {
     // Check if the token is valid
     if (token) {
       // Set the token in local storage
       localStorage.setItem("token", token);
       setIsLoggedIn(true);
+      navigate("/");
     } else {
       // Token is invalid or null
       // Show an error message or redirect to the login page
@@ -61,8 +57,13 @@ function WrapperComponents() {
           <div style={{ flex: 1 }}>
             <Navbar onLogout={handleLogout} />
             <Routes>
-              <Route exact path="/" element={<Dashboard />} />
+              <Route path="/" element={<Dashboard />} />
               <Route path="/products" element={<Products />} />
+              <Route path="/customers" element={<Customers />} />
+              <Route path="/transactions" element={<Transactions />} />
+              <Route path="/orders" element={<Orders />} />
+              <Route path="/admin" element={<Admin />} />
+              <Route path="/*" element={<ErrorPage />} />
             </Routes>
           </div>
         </div>

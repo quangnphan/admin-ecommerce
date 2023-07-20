@@ -61,6 +61,10 @@ const Sidebar = () => {
   let isSidebarOpen = useSelector((state) => state.layout.visible);
   const dispatch = useDispatch();
 
+  const handleItemClick = (text) => {
+    setActive(text.toLowerCase());
+  };
+
   return (
     <Box component="nav">
       {isSidebarOpen && (
@@ -98,9 +102,7 @@ const Sidebar = () => {
                   <ListItem key={text} disablePadding>
                     <NavLink
                       to={path}
-                      onClick={() => {
-                        setActive(lcText);
-                      }}
+                      onClick={() => handleItemClick(lcText)}
                     >
                       <ListItemButton
                         sx={{

@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import "./login.css";
-import { Button } from "@mui/material";
-import { useDispatch } from "react-redux";
+import { Button, CircularProgress } from "@mui/material";
+import { useDispatch,useSelector } from "react-redux";
 import { loginUser } from "./loginSlice";
 
 const Login = ({ onLogin }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
+  const loading = useSelector((state)=>state.login.loading);
 
   const handleUsernameChange = (e) => {
     setEmail(e.target.value);
@@ -41,11 +42,12 @@ const Login = ({ onLogin }) => {
       <h2>Login</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="username">Username:</label>
+          <label htmlFor="email">Username:</label>
           <input
             type="text"
             id="email"
             value={email}
+            autoComplete="username"
             onChange={handleUsernameChange}
           />
         </div>
@@ -54,12 +56,13 @@ const Login = ({ onLogin }) => {
           <input
             type="password"
             id="password"
+            autoComplete="current-password"
             value={password}
             onChange={handlePasswordChange}
           />
         </div>
         <Button variant="contained" type="submit">
-          Log In
+          Login {loading ? <CircularProgress style={{color: 'white'}}/> : ''}
         </Button>
       </form>
     </div>
