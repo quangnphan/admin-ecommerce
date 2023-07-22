@@ -2,8 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 import apiClient from "../api/api";
 
 const initialState = {
-  loading: false,
-  error: null,
+  isLoggedIn: !!localStorage.getItem("token"),
+  loginStatus: "idle", // idle | loading | succeeded | failed
 };
 
 const loginSlice = createSlice({
@@ -11,16 +11,15 @@ const loginSlice = createSlice({
   initialState,
   reducers: {
     loginRequest: (state) => {
-      state.loading = true;
-      state.error = null;
+      state.loginStatus = "loading";
     },
     loginSuccess: (state) => {
-      state.loading = false;
-      state.error = null;
+      state.isLoggedIn = true;
+      state.loginStatus = "succeeded";
     },
-    loginFailure: (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
+    loginFailure: (state) => {
+      state.isLoggedIn = false;
+      state.loginStatus = "failed";
     },
   },
 });
@@ -43,7 +42,8 @@ export const loginUser = (credentials) => async (dispatch) => {
   } catch (error) {
     // Handle login failure
     // - Dispatch loginFailure action with error message
-    dispatch(loginFailure(error.message));
+    dispatch(loginFailure());
+    console.log(error);
   }
 };
 

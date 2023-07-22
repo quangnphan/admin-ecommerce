@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import "./login.css";
 import { Button, CircularProgress } from "@mui/material";
-import { useDispatch,useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "./loginSlice";
 
 const Login = ({ onLogin }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
-  const loading = useSelector((state)=>state.login.loading);
+  const loginStatus = useSelector((state) => state.login.loginStatus);
 
   const handleUsernameChange = (e) => {
     setEmail(e.target.value);
@@ -22,7 +22,10 @@ const Login = ({ onLogin }) => {
     e.preventDefault();
     try {
       // Perform login logic here
-      await dispatch(loginUser({ email, password }));
+      if (loginStatus !== "loading") {
+        await dispatch(loginUser({ email, password }));
+      }
+      
       const token = localStorage.getItem("token");
       if (token) {
         onLogin(token);
@@ -62,7 +65,7 @@ const Login = ({ onLogin }) => {
           />
         </div>
         <Button variant="contained" type="submit">
-          Login {loading ? <CircularProgress style={{color: 'white'}}/> : ''}
+          Login {loginStatus === "loading" && <CircularProgress style={{ color: "white" }} />}
         </Button>
       </form>
     </div>
