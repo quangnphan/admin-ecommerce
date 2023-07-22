@@ -20,9 +20,9 @@ import {
   MenuItem,
 } from "@mui/material";
 
-import { show, close } from '../../features/layout/layoutSlice'
+import { show, close } from "../../features/layout/layoutSlice";
 
-const Navbar = ({onLogout}) => {
+const Navbar = ({ onLogout }) => {
   const dispatch = useDispatch();
   const isSidebarOpen = useSelector((state) => state.layout.visible);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -30,8 +30,7 @@ const Navbar = ({onLogout}) => {
   const handleClick = (event) => setAnchorEl(event.currentTarget);
   const handleClose = () => {
     setAnchorEl(null);
-    onLogout();
-  }
+  };
 
   return (
     <AppBar
@@ -86,7 +85,14 @@ const Navbar = ({onLogout}) => {
               onClose={handleClose}
               anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
             >
-              <MenuItem onClick={handleClose}>Log Out</MenuItem>
+              <MenuItem
+                onClick={() => {
+                  handleClose();
+                  onLogout();
+                }}
+              >
+                Log Out
+              </MenuItem>
             </Menu>
           </div>
         </div>
