@@ -22,6 +22,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, "Please provide password"],
     minlength: 6,
+    select: false, // Exclude the password field when querying User model
   },
 });
 
@@ -40,9 +41,14 @@ userSchema.methods.createJWT = function () {
   );
 };
 
-userSchema.methods.comparePassword = async function (canditatePassword) {
-  const isMatch = await bcrypt.compare(canditatePassword, this.password);
-  return isMatch;
+userSchema.methods.comparePassword = async function (inputPassword) {
+  try {
+    const isMatch = await bcrypt.compare(inputPassword, this.password);
+    return isMatch;
+  } catch (error) {
+    console.error(error);
+    return false; // or throw an error if needed
+  }
 };
 
 module.exports = mongoose.model("User", userSchema);
