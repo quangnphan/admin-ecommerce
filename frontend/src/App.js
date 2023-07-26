@@ -56,15 +56,17 @@ function WrapperComponents() {
           <Sidebar />
           <div style={{ flex: 1 }}>
             <Navbar onLogout={handleLogout} />
-            <Routes>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/products" element={<Products />} />
-              <Route path="/customers" element={<Customers />} />
-              <Route path="/transactions" element={<Transactions />} />
-              <Route path="/orders" element={<Orders />} />
-              <Route path="/admin" element={<Admin />} />
-              <Route path="/*" element={<ErrorPage />} />
-            </Routes>
+            <div style={{ padding: "20px" }}>
+              <Routes>
+                <Route path="/" element={<Dashboard />} />
+                <Route path="/products" element={<Products />} />
+                <Route path="/customers" element={<Customers />} />
+                <Route path="/transactions" element={<Transactions />} />
+                <Route path="/orders" element={<Orders />} />
+                <Route path="/admin" element={<Admin />} />
+                <Route path="/*" element={<ErrorPage />} />
+              </Routes>
+            </div>
           </div>
         </div>
       ) : (

@@ -36,6 +36,8 @@ const Products = () => {
         ...product,
         id: index + 1, // generate an index-based id
         category: product.category.name,
+        created_by: product.created_by.name,
+        created_at: new Date(product.created_at).toLocaleDateString("en-US"),
         price: getLowestPrice(product),
       }))
     : [];
@@ -59,7 +61,7 @@ const Products = () => {
   }
 
   return (
-    <div style={{ height: "100%", width: "100%", padding: "20px" }}>
+    <div style={{ height: "100%", width: "100%" }}>
       <DataGrid
         rows={productsWithId}
         columns={columns}
