@@ -2,13 +2,15 @@ import React, { useState } from "react";
 import "./login.css";
 import { Button, CircularProgress } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser } from "./loginSlice";
+import { loginUser,clearErrorMessage, loginFailure } from "./loginSlice";
+import ErrorModal from "../../components/modal/modal";
 
 const Login = ({ onLogin }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
   const loginStatus = useSelector((state) => state.login.loginStatus);
+  const errorMessage = useSelector((state) => state.login.errorMessage);
 
   const handleUsernameChange = (e) => {
     setEmail(e.target.value);
@@ -37,7 +39,12 @@ const Login = ({ onLogin }) => {
     } catch (error) {
       // Handle login error
       console.log(error);
+      dispatch(loginFailure(error));
     }
+  };
+
+  const handleCloseErrorModal = () => {
+    dispatch(clearErrorMessage());
   };
 
   return (
@@ -68,6 +75,7 @@ const Login = ({ onLogin }) => {
           Login {loginStatus === "loading" && <CircularProgress style={{ color: "white" }} />}
         </Button>
       </form>
+      <ErrorModal open={loginStatus === "failed"} onClose={handleCloseErrorModal} errorMessage={errorMessage} />
     </div>
   );
 };
