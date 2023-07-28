@@ -7,6 +7,7 @@ const Products = () => {
   const dispatch = useDispatch();
   const status = useSelector((state) => state.products.status);
   const { products } = useSelector((state) => state.products.products);
+  const errorMsg = useSelector((state) => state.products.error);
 
   useEffect(() => {
     dispatch(fetchProducts());
@@ -57,7 +58,7 @@ const Products = () => {
   }
 
   if (status === "error") {
-    return <div>Error: {status.error}</div>;
+    return <div>Error: {errorMsg}</div>;
   }
 
   return (
