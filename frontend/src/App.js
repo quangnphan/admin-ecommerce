@@ -45,6 +45,7 @@ function WrapperComponents() {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("username");
     setIsLoggedIn(false);
     navigate("/login");
   };
