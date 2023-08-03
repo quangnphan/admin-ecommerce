@@ -1,13 +1,41 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts } from "./productsSlice";
 import { DataGrid } from "@mui/x-data-grid";
+import EditDialog from "../../components/editFields/Edit";
+import { Button } from "@mui/material";
+import apiClient from "../api/api";
 
 const Products = () => {
   const dispatch = useDispatch();
   const status = useSelector((state) => state.products.status);
   const { products } = useSelector((state) => state.products.products);
   const errorMsg = useSelector((state) => state.products.error);
+  const [selectedField, setSelectedField] = useState(null);
+  const [isEditDialogOpen, setEditDialogOpen] = useState(false);
+
+  const handleEditClick = (field) => {
+    setSelectedField(field);
+    setEditDialogOpen(true);
+  };
+
+  const handleEditDialogClose = () => {
+    setEditDialogOpen(false);
+  };
+
+  const handleProductSave = async (editedProduct) => {
+    try {
+      // Make the API call to update the product
+      const updatedProduct = await apiClient.patch(`/user/product/${selectedField._id}`,editedProduct);
+      console.log(updatedProduct);
+      // Dispatch an action to update the product in Redux store if needed
+      // dispatch({ type: "UPDATE_PRODUCT", payload: updatedProduct });
+    } catch (error) {
+      // Handle errors if the API call fails
+      console.error("Failed to update product:", error);
+      // Display an error message to the user if needed
+    }
+  };
 
   useEffect(() => {
     dispatch(fetchProducts());
@@ -50,6 +78,17 @@ const Products = () => {
     { field: "category", headerName: "Category", width: 120 },
     { field: "created_at", headerName: "Created At", width: 120 },
     { field: "created_by", headerName: "Created By", width: 120 },
+    {field:"out_of_stock",headerName:"Out Of Stock",width: 120},
+    {
+      field: "actions",
+      headerName: "Actions",
+      width: 120,
+      renderCell: (params) => (
+        <Button variant="outlined" color="primary" onClick={() => handleEditClick(params.row)}>
+          Edit
+        </Button>
+      ),
+    },
     // Add other columns based on your product data structure
   ];
 
@@ -68,7 +107,13 @@ const Products = () => {
         columns={columns}
         pageSize={5}
         rowsPerPageOptions={[5, 10, 20]}
-        checkboxSelection
+        // checkboxSelection
+      />
+      <EditDialog
+        field={selectedField}
+        open={isEditDialogOpen}
+        onClose={handleEditDialogClose}
+        onSave={handleProductSave}
       />
     </div>
   );
