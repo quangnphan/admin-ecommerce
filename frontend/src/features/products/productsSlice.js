@@ -15,6 +15,14 @@ export const fetchProducts = createAsyncThunk(
   }
 );
 
+export const updateProduct = createAsyncThunk(
+  "products/updateProduct",
+  async ({ id, editedProduct }) => {
+    const response = await apiClient.patch(`/user/product/${id}`, editedProduct);
+    return response.data;
+  }
+);
+
 const productsSlice = createSlice({
     name: "products",
     initialState,
@@ -30,6 +38,13 @@ const productsSlice = createSlice({
         })
         .addCase(fetchProducts.rejected, (state, action) => {
           state.status = "error";
+          state.error = action.error.message;
+        })
+        .addCase(updateProduct.fulfilled, (state) => {
+          state.status = "succeeded";
+        })               
+        .addCase(updateProduct.rejected, (state, action) => {
+          state.status = "failed";
           state.error = action.error.message;
         });
     },

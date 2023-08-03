@@ -68,6 +68,10 @@ const EditDialog = ({ field, open, onClose, onSave }) => {
   };
 
   const handleEditField = (fieldName) => {
+    if (fieldName === "created_at" || fieldName === "created_by") {
+      // Disable editing for "created_at" and "created_by" fields
+      return;
+    }
     setFieldToEdit(fieldName);
     setEditedFieldsList((prevFields) => ({
       ...prevFields,
@@ -82,7 +86,7 @@ const EditDialog = ({ field, open, onClose, onSave }) => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     const fieldPath = name.split(".");
-  
+
     if (fieldPath[0] === "sizes") {
       const updatedFieldsList = { ...editedFieldsList };
       updatedFieldsList[name] = value;
@@ -115,8 +119,10 @@ const EditDialog = ({ field, open, onClose, onSave }) => {
     const updatedProduct = {
       ...updatedFields, // Use the updatedFields object for the edited values
     };
-    onSave(updatedProduct);
     onClose();
+    onSave(updatedProduct);
+    setEditedField({});
+    setEditedFieldsList({});
   };
 
   const handleCloseDialog = () => {
@@ -152,7 +158,11 @@ const EditDialog = ({ field, open, onClose, onSave }) => {
                   value={
                     editedFieldsList[
                       `sizes.${sizeIndex}.storages.${storageIndex}.capacity`
-                    ] || storage.capacity
+                    ] === undefined
+                      ? storage.capacity
+                      : editedFieldsList[
+                          `sizes.${sizeIndex}.storages.${storageIndex}.capacity`
+                        ]
                   }
                   onChange={handleInputChange}
                   style={{ marginBottom: "8px" }}
@@ -164,7 +174,11 @@ const EditDialog = ({ field, open, onClose, onSave }) => {
                   value={
                     editedFieldsList[
                       `sizes.${sizeIndex}.storages.${storageIndex}.price`
-                    ] || storage.price
+                    ] === undefined
+                      ? storage.price
+                      : editedFieldsList[
+                          `sizes.${sizeIndex}.storages.${storageIndex}.price`
+                        ]
                   }
                   onChange={handleInputChange}
                   style={{ marginBottom: "16px" }}
@@ -227,6 +241,9 @@ const EditDialog = ({ field, open, onClose, onSave }) => {
       const isObjectOrArray =
         typeof value === "object" && !Array.isArray(value);
 
+      // Check if the field is "created_at" or "created_by" to determine if it should be hidden
+      const isHidden = fieldName === "created_at" || fieldName === "created_by";
+
       return (
         <div
           key={fieldName}
@@ -251,6 +268,7 @@ const EditDialog = ({ field, open, onClose, onSave }) => {
                   name={fieldName}
                   value={value}
                   onChange={handleInputChange}
+                  disabled={isHidden} // Disable editing for "created_at" and "created_by" fields
                 />
                 <Button
                   variant="contained"
@@ -273,15 +291,7 @@ const EditDialog = ({ field, open, onClose, onSave }) => {
                 <Typography style={valueStyle}>
                   {JSON.stringify(value, null, 2)}
                 </Typography>
-                {isEditing ? (
-                  <Button
-                    variant="text"
-                    disabled
-                    style={{ marginLeft: "16px" }}
-                  >
-                    Edit
-                  </Button>
-                ) : (
+                {!isHidden && (
                   <Button
                     variant="text"
                     color="primary"

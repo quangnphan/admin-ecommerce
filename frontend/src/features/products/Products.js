@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProducts } from "./productsSlice";
+import { fetchProducts, updateProduct } from "./productsSlice";
 import { DataGrid } from "@mui/x-data-grid";
 import EditDialog from "../../components/editFields/Edit";
 import { Button } from "@mui/material";
-import apiClient from "../api/api";
 
 const Products = () => {
   const dispatch = useDispatch();
@@ -26,10 +25,10 @@ const Products = () => {
   const handleProductSave = async (editedProduct) => {
     try {
       // Make the API call to update the product
-      const updatedProduct = await apiClient.patch(`/user/product/${selectedField._id}`,editedProduct);
-      console.log(updatedProduct);
-      // Dispatch an action to update the product in Redux store if needed
-      // dispatch({ type: "UPDATE_PRODUCT", payload: updatedProduct });
+      await dispatch(
+        updateProduct({ id: selectedField._id, editedProduct })
+      );
+      dispatch(fetchProducts());//Need to re-call an api because couldn't find a way to update redux store
     } catch (error) {
       // Handle errors if the API call fails
       console.error("Failed to update product:", error);
@@ -78,13 +77,17 @@ const Products = () => {
     { field: "category", headerName: "Category", width: 120 },
     { field: "created_at", headerName: "Created At", width: 120 },
     { field: "created_by", headerName: "Created By", width: 120 },
-    {field:"out_of_stock",headerName:"Out Of Stock",width: 120},
+    { field: "out_of_stock", headerName: "Out Of Stock", width: 120 },
     {
       field: "actions",
       headerName: "Actions",
       width: 120,
       renderCell: (params) => (
-        <Button variant="outlined" color="primary" onClick={() => handleEditClick(params.row)}>
+        <Button
+          variant="outlined"
+          color="primary"
+          onClick={() => handleEditClick(params.row)}
+        >
           Edit
         </Button>
       ),

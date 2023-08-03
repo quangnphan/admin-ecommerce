@@ -24,10 +24,19 @@ import { show, close } from "../../features/layout/layoutSlice";
 
 const Navbar = ({ onLogout }) => {
   const dispatch = useDispatch();
-  const isSidebarOpen = useSelector((state) => state.layout.visible);
   const [anchorEl, setAnchorEl] = useState(null);
+  const isSidebarOpen = useSelector((state) => state.layout.visible);
+  const isLoggedIn = useSelector((state) => state.login.isLoggedIn);
+  let userName = useSelector((state) => state.login.user?.name);
+
+  if(isLoggedIn && !userName){
+    userName = localStorage.getItem("username");
+  }
+ 
   const isOpen = Boolean(anchorEl);
+
   const handleClick = (event) => setAnchorEl(event.currentTarget);
+
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -73,7 +82,7 @@ const Navbar = ({ onLogout }) => {
               <PersonIcon />
               <Box textAlign="left">
                 <Typography fontWeight="bold" fontSize="0.85rem">
-                  username
+                  {userName}
                 </Typography>
                 <Typography fontSize="0.75rem">occupation</Typography>
               </Box>
