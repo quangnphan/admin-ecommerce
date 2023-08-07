@@ -2,9 +2,9 @@ const express = require("express");
 const router = express.Router();
 
 const {
-  getAllOrders,
-} = require("../controllers/orders");
+  createOrder,
+} = require("../controllers/publicOrders");
 
-router.route("/orders").get(getAllOrders)
+router.route("/order").post(createOrder)
 
 module.exports = router;
