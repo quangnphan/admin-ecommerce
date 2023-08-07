@@ -13,9 +13,10 @@ const authenUser = require("./middleware/authentication");
 const authRouter = require("./routes/auth");
 const productsRouter = require("./routes/products");
 const publicProductsRouter = require("./routes/publicProducts");
-const orderRouter = require("./routes/orders");
+const publicOrderRouter = require("./routes/publicOrders");
 const paymentRouter = require('./routes/payment');
 const usersRouter = require('./routes/users');
+const ordersRouter = require('./routes/orders');
 
 //errorhandler
 const notFound = require("./middleware/not-found");
@@ -31,8 +32,9 @@ app.get("/", (req, res) => {
 app.use("/api/auth", authRouter);
 app.use("/api/user", authenUser, productsRouter);
 app.use("/api/user", authenUser, usersRouter);
+app.use("/api/user", authenUser, ordersRouter);
 app.use("/api/ecom", publicProductsRouter);
-app.use("/api/ecom", orderRouter);
+app.use("/api/ecom", publicOrderRouter);
 app.use("/api/ecom", paymentRouter);
 app.use(notFound);
 
