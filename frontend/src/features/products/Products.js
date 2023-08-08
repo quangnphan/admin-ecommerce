@@ -30,9 +30,7 @@ const Products = () => {
       );
       dispatch(fetchProducts());//Need to re-call an api because couldn't find a way to update redux store
     } catch (error) {
-      // Handle errors if the API call fails
       console.error("Failed to update product:", error);
-      // Display an error message to the user if needed
     }
   };
 
