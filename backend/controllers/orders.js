@@ -1,5 +1,4 @@
 const { StatusCodes } = require("http-status-codes");
-const Product = require("../models/Product");
 const Order = require("../models/Order");
 
 const getAllOrders = async (req, res) => {

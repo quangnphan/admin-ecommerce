@@ -45,8 +45,10 @@ const EditDialog = ({ field, open, onClose, onSave }) => {
   };
 
   useEffect(() => {
-    fetchCategories();
-  }, []);
+    if(open){
+      fetchCategories();
+    }
+  }, [open]);
 
   const listItemStyle = {
     display: "flex",
