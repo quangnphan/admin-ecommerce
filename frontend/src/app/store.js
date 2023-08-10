@@ -5,6 +5,7 @@ import productsSlice from "../features/products/productsSlice";
 import usersSlice from "../features/admin/usersSlice";
 import ordersSlice from "../features/orders/ordersSlice";
 import customersSlice from "../features/customers/customersSlice";
+import transactionsSlice from "../features/transactions/transactionsSlice";
 
 const rootReducer = {
     layout: layoutSlice,
@@ -12,7 +13,8 @@ const rootReducer = {
     products: productsSlice,
     users: usersSlice,
     orders: ordersSlice,
-    customers: customersSlice
+    customers: customersSlice,
+    transactions: transactionsSlice
 }
 
 const store = configureStore({

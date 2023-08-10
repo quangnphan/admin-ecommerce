@@ -13,7 +13,7 @@ const Customer = () => {
     ? customers.map((customer, index) => ({
         ...customer,
         id: index + 1, // generate an index-based id
-      }))
+      })).reverse()
     : [];
 
   useEffect(() => {
