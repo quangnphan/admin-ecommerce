@@ -18,7 +18,7 @@ const Order = () => {
         ...order,
         id: index + 1, // generate an index-based id
         order_date: new Date(order.order_date).toLocaleDateString("en-US"),
-      }))
+      })).reverse()
     : [];
 
   const columns = [
