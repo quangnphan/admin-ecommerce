@@ -48,6 +48,19 @@ const Order = () => {
       },
     },
     {
+      field: "total_amount",
+      headerName: "Amount",
+      width: 130,
+      valueGetter: (params) => {
+        console.log(params)
+        const formattedAmount = (params.row.total_amount).toLocaleString(undefined, {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        });
+        return formattedAmount;
+      },
+    },
+    {
       field: "order_date",
       headerName: "Order Date",
       width: 130,
