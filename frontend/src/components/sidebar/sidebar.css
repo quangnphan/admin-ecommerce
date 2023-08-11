@@ -1,0 +1,15 @@
+.MuiDrawer-paperAnchorDockedLeft {
+  color: #fff;
+  background-color: #001529 !important;
+}
+
+.MuiDrawer-root .MuiPaper-root {
+  width: 250px;
+}
+.MuiListItem-root a {
+  width: 100%;
+}
+.MuiListItemButton-gutters:hover {
+  background-color: #1890ff !important;
+  opacity: 0.9;
+}

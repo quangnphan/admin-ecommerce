@@ -17,14 +17,3 @@ a,ul,li{
   justify-content: space-between;
   align-items: center;
 }
-
-/* sidebar */
-.MuiDrawer-root .MuiPaper-root{
-  width: 250px;
-}
-.MuiListItem-root a{
-  width: 100%;
-}
-.MuiListItemButton-gutters:hover{
-  background-color: rgb(207, 207, 207) !important;
-}

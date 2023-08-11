@@ -21,6 +21,7 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import { close } from "../../features/layout/layoutSlice";
 import { NavLink } from "react-router-dom";
+import "./sidebar.css";
 
 const navItems = [
   {
@@ -56,7 +57,7 @@ const navItems = [
 ];
 
 const Sidebar = () => {
-//   const isNonMobile = useMediaQuery("(min-width: 600px)");
+  //   const isNonMobile = useMediaQuery("(min-width: 600px)");
   const [active, setActive] = useState("dashboard");
   let isSidebarOpen = useSelector((state) => state.layout.visible);
   const dispatch = useDispatch();
@@ -81,7 +82,11 @@ const Sidebar = () => {
             <Box m="1.5rem 2rem 2rem 3rem">
               <div className="flex-between">
                 <Box display="flex" alignItems="center">
-                  <Typography variant="h4" fontWeight="bold">
+                  <Typography
+                    variant="h4"
+                    fontWeight="bold"
+                    style={{ color: "#1890ff" }}
+                  >
                     ECOM
                   </Typography>
                 </Box>
@@ -100,21 +105,24 @@ const Sidebar = () => {
 
                 return (
                   <ListItem key={text} disablePadding>
-                    <NavLink
-                      to={path}
-                      onClick={() => handleItemClick(lcText)}
-                    >
+                    <NavLink to={path} onClick={() => handleItemClick(lcText)}>
                       <ListItemButton
                         sx={{
                           backgroundColor:
-                            active === lcText ? "#000000" : "transparent",
-                          color: active === lcText ? "#ffffff" : "#000000",
+                            active === lcText ? "#1890ff" : "transparent",
+                          color:
+                            active === lcText
+                              ? "#ffffff"
+                              : "hsla(0,0%,100%,.65)",
                         }}
                       >
                         <ListItemIcon
                           sx={{
                             ml: "1rem",
-                            color: active === lcText ? "#ffffff" : "#000000",
+                            color:
+                              active === lcText
+                                ? "#ffffff"
+                                : "hsla(0,0%,100%,.65)",
                           }}
                         >
                           {icon}
