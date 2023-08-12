@@ -1,29 +1,20 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchOrders } from "../../features/orders/ordersSlice";
+import { useSelector } from "react-redux";
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const ProductsChart = () => {
-  const dispatch = useDispatch();
+const ProductsChart = ({ obj }) => {
   const orders = useSelector((state) => state.orders.orders);
-
-  useEffect(() => {
-    dispatch(fetchOrders()); // Fetch orders before rendering the chart
-  }, [dispatch]);
 
   // Calculate product frequencies
   const productFrequencies = {};
-  const productNames = {}; // Store product names
 
   orders.forEach((order) => {
     order.products.forEach((product) => {
-      const productId = product.product._id;
       const productName = product.product.name;
       productFrequencies[productName] =
         (productFrequencies[productName] || 0) + 1;
-      productNames[productId] = productName;
     });
   });
 
@@ -52,8 +43,7 @@ const ProductsChart = () => {
     responsive: true,
     plugins: {
       legend: {
-        display: true, // Display legend
-        position: "right"
+        display: true,
       },
     },
   };
@@ -62,8 +52,8 @@ const ProductsChart = () => {
     <div>
       <h2>Orders Distribution by Product</h2>
       {orders.length > 0 ? (
-        <div style={{ width: "450px" }}>
-          <Doughnut data={chartData} options={chartOptions} />
+        <div style={{maxHeight: '400px'}}>
+        <Doughnut data={chartData} options={chartOptions} />
         </div>
       ) : (
         <p>Loading...</p>
