@@ -6,7 +6,7 @@ import { fetchOrders } from "./ordersSlice";
 const Order = () => {
   const dispatch = useDispatch();
   const status = useSelector((state) => state.orders.status);
-  const orders = useSelector((state) => state.orders.users);
+  const orders = useSelector((state) => state.orders.orders);
   const errorMsg = useSelector((state) => state.orders.error);
 
   useEffect(() => {
@@ -52,7 +52,6 @@ const Order = () => {
       headerName: "Amount",
       width: 130,
       valueGetter: (params) => {
-        console.log(params)
         const formattedAmount = (params.row.total_amount).toLocaleString(undefined, {
           minimumFractionDigits: 2,
           maximumFractionDigits: 2,
