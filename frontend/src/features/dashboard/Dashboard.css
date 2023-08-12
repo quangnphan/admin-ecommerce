@@ -1,0 +1,15 @@
+/* Dashboard.css */
+.dashboard-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 20px; /* Adjust the gap between charts as needed */
+  padding: 20px; /* Add some padding to the container */
+}
+
+.chart-container {
+  flex: 1;
+  min-width: calc(
+    50% - 10px
+  ); /* Subtract half the gap to ensure two charts fit */
+}
