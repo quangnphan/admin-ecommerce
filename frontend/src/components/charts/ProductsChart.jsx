@@ -2,12 +2,12 @@ import React, { useEffect } from "react";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchOrders,selectOrders  } from "../../features/orders/ordersSlice";
+import { fetchOrders } from "../../features/orders/ordersSlice";
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const ProductsChart = () => {
   const dispatch = useDispatch();
-  const orders = useSelector(selectOrders);
+  const orders = useSelector((state) => state.orders.orders);
 
   useEffect(() => {
     dispatch(fetchOrders()); // Fetch orders before rendering the chart
@@ -20,9 +20,10 @@ const ProductsChart = () => {
   orders.forEach((order) => {
     order.products.forEach((product) => {
       const productId = product.product._id;
-      const productName = product.product.name; // Get the product name
-      productFrequencies[productId] = (productFrequencies[productId] || 0) + 1;
-      productNames[productName] = productName; // Store the product name
+      const productName = product.product.name;
+      productFrequencies[productName] =
+        (productFrequencies[productName] || 0) + 1;
+      productNames[productId] = productName;
     });
   });
 
@@ -35,6 +36,12 @@ const ProductsChart = () => {
           "#FF6384",
           "#36A2EB",
           "#FFCE56",
+          "#8E44AD",
+          "#3498DB",
+          "#E74C3C",
+          "#1ABC9C",
+          "#F39C12",
+          "#D35400",
           // Add more colors as needed
         ],
       },
@@ -46,6 +53,7 @@ const ProductsChart = () => {
     plugins: {
       legend: {
         display: true, // Display legend
+        position: "right"
       },
     },
   };
@@ -53,9 +61,13 @@ const ProductsChart = () => {
   return (
     <div>
       <h2>Orders Distribution by Product</h2>
-      <div style={{ width: "600px" }}>
-        <Doughnut data={chartData} options={chartOptions} />
-      </div>
+      {orders.length > 0 ? (
+        <div style={{ width: "450px" }}>
+          <Doughnut data={chartData} options={chartOptions} />
+        </div>
+      ) : (
+        <p>Loading...</p>
+      )}
     </div>
   );
 };
