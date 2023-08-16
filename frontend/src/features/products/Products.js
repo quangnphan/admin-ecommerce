@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProducts, updateProduct } from "./productsSlice";
+import { fetchProducts, updateProduct, deleteProduct } from "./productsSlice";
 import { DataGrid } from "@mui/x-data-grid";
 import EditDialog from "../../components/editFields/Edit";
 import { Button } from "@mui/material";
@@ -8,7 +8,7 @@ import { Button } from "@mui/material";
 const Products = () => {
   const dispatch = useDispatch();
   const status = useSelector((state) => state.products.status);
-  const { products } = useSelector((state) => state.products.products);
+  const products = useSelector((state) => state.products.products);
   const errorMsg = useSelector((state) => state.products.error);
   const [selectedField, setSelectedField] = useState(null);
   const [isEditDialogOpen, setEditDialogOpen] = useState(false);
@@ -17,6 +17,10 @@ const Products = () => {
     setSelectedField(field);
     setEditDialogOpen(true);
   };
+
+  const handleDeleteClick = (id) => {
+    dispatch(deleteProduct(id));
+  }
 
   const handleEditDialogClose = () => {
     setEditDialogOpen(false);
@@ -79,15 +83,25 @@ const Products = () => {
     {
       field: "actions",
       headerName: "Actions",
-      width: 120,
+      width: 200,
       renderCell: (params) => (
+        <div>
         <Button
           variant="outlined"
           color="primary"
           onClick={() => handleEditClick(params.row)}
+          style={{marginRight: '5px'}}
         >
           Edit
         </Button>
+        <Button
+          variant="outlined"
+          color="secondary"
+          onClick={() => handleDeleteClick(params.row._id)}
+        >
+          Delete
+        </Button>
+      </div>
       ),
     },
     // Add other columns based on your product data structure
