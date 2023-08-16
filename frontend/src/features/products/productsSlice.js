@@ -18,36 +18,64 @@ export const fetchProducts = createAsyncThunk(
 export const updateProduct = createAsyncThunk(
   "products/updateProduct",
   async ({ id, editedProduct }) => {
-    const response = await apiClient.patch(`/user/product/${id}`, editedProduct);
+    const response = await apiClient.patch(
+      `/user/product/${id}`,
+      editedProduct
+    );
     return response.data;
   }
 );
 
+export const deleteProduct = createAsyncThunk(
+  "products/deleteProduct",
+  async (productId) => {
+    await apiClient.delete(`/user/product/${productId}`);
+    return productId; // Return the deleted product's ID
+  }
+);
+
 const productsSlice = createSlice({
-    name: "products",
-    initialState,
-    reducers: {},
-    extraReducers: (builder) => {
-      builder
-        .addCase(fetchProducts.pending, (state) => {
-          state.status = "loading";
-        })
-        .addCase(fetchProducts.fulfilled, (state, action) => {
-          state.status = "succeeded";
-          state.products = action.payload; // Set the fetched products array
-        })
-        .addCase(fetchProducts.rejected, (state, action) => {
-          state.status = "error";
-          state.error = action.error.message;
-        })
-        .addCase(updateProduct.fulfilled, (state) => {
-          state.status = "succeeded";
-        })               
-        .addCase(updateProduct.rejected, (state, action) => {
-          state.status = "failed";
-          state.error = action.error.message;
-        });
-    },
-  });
+  name: "products",
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchProducts.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchProducts.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.products = action.payload.products; // Set the fetched products array
+      })
+      .addCase(fetchProducts.rejected, (state, action) => {
+        state.status = "error";
+        state.error = action.error.message;
+      })
+      .addCase(updateProduct.fulfilled, (state) => {
+        // const updatedProductIndex = state.products.findIndex(
+        //   (product) => product._id === action.payload._id
+        // );
+        // if (updatedProductIndex !== -1) {
+        //   // Replace the old product with the updated one
+        //   state.products[updatedProductIndex] = action.payload;
+        // }
+        state.status = "succeeded";
+      })
+      .addCase(updateProduct.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(deleteProduct.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.products = state.products.filter(
+          (product) => product._id !== action.payload
+        );
+      })
+      .addCase(deleteProduct.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
+      });
+  },
+});
 
 export default productsSlice.reducer;

@@ -2,21 +2,29 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts, updateProduct } from "./productsSlice";
 import { DataGrid } from "@mui/x-data-grid";
-import EditDialog from "../../components/editFields/Edit";
+import EditDialog from "../../components/ProductsComponents/Edit";
+import DeleteProductPopup from "../../components/ProductsComponents/Delete";
 import { Button } from "@mui/material";
 
 const Products = () => {
   const dispatch = useDispatch();
   const status = useSelector((state) => state.products.status);
-  const { products } = useSelector((state) => state.products.products);
+  const products = useSelector((state) => state.products.products);
   const errorMsg = useSelector((state) => state.products.error);
   const [selectedField, setSelectedField] = useState(null);
   const [isEditDialogOpen, setEditDialogOpen] = useState(false);
+  const [idToDelete,setIdToDelete] = useState(null);
+  const [deletePopup,setDeletePopup] = useState(false);
 
   const handleEditClick = (field) => {
     setSelectedField(field);
     setEditDialogOpen(true);
   };
+
+  const handleDeleteClick = (id) => {
+    setIdToDelete(id);
+    setDeletePopup(true);
+  }
 
   const handleEditDialogClose = () => {
     setEditDialogOpen(false);
@@ -79,15 +87,25 @@ const Products = () => {
     {
       field: "actions",
       headerName: "Actions",
-      width: 120,
+      width: 200,
       renderCell: (params) => (
+        <div>
         <Button
           variant="outlined"
           color="primary"
           onClick={() => handleEditClick(params.row)}
+          style={{marginRight: '5px'}}
         >
           Edit
         </Button>
+        <Button
+          variant="outlined"
+          color="secondary"
+          onClick={() => handleDeleteClick(params.row._id)}
+        >
+          Delete
+        </Button>
+      </div>
       ),
     },
     // Add other columns based on your product data structure
@@ -116,6 +134,7 @@ const Products = () => {
         onClose={handleEditDialogClose}
         onSave={handleProductSave}
       />
+       <DeleteProductPopup id={idToDelete} deletePopup={deletePopup} setDeletePopup={setDeletePopup}/>
     </div>
   );
 };
