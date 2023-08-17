@@ -26,7 +26,7 @@ const login = async (req, res) => {
     }
     
     const token = user.createJWT();
-    res.status(StatusCodes.OK).json({ user: { name: user.name }, token });
+    res.status(StatusCodes.OK).json({ user: { name: user.name,_id: user._id }, token });
   } catch (error) {
     console.error(error);
     // Check if the error is related to database operations
