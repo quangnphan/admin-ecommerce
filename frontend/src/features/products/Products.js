@@ -4,6 +4,7 @@ import { fetchProducts, updateProduct } from "./productsSlice";
 import { DataGrid } from "@mui/x-data-grid";
 import EditDialog from "../../components/ProductsComponents/Edit";
 import DeleteProductPopup from "../../components/ProductsComponents/Delete";
+import AddProductForm from "../../components/ProductsComponents/Add";
 import { Button } from "@mui/material";
 
 const Products = () => {
@@ -15,6 +16,7 @@ const Products = () => {
   const [isEditDialogOpen, setEditDialogOpen] = useState(false);
   const [idToDelete,setIdToDelete] = useState(null);
   const [deletePopup,setDeletePopup] = useState(false);
+  const [addDialog,setAddDialog] = useState(false);
 
   const handleEditClick = (field) => {
     setSelectedField(field);
@@ -121,6 +123,13 @@ const Products = () => {
 
   return (
     <div style={{ height: "100%", width: "100%" }}>
+    <Button
+        variant="contained"
+        className="add-button"
+        onClick={()=>setAddDialog(true)}
+      >
+        Add Product
+      </Button>
       <DataGrid
         rows={productsWithId}
         columns={columns}
@@ -135,6 +144,7 @@ const Products = () => {
         onSave={handleProductSave}
       />
        <DeleteProductPopup id={idToDelete} deletePopup={deletePopup} setDeletePopup={setDeletePopup}/>
+       <AddProductForm addDialog={addDialog} setAddDialog={setAddDialog}/>
     </div>
   );
 };
