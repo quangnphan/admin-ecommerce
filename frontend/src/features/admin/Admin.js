@@ -1,8 +1,15 @@
-import React, { useEffect,useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { DataGrid } from "@mui/x-data-grid";
-import { fetchUsers,addUser } from "./usersSlice";
-import { Dialog,Button } from "@mui/material";
+import { fetchUsers, addUser, deleteUser } from "./usersSlice";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Button,
+} from "@mui/material";
 import AddUserForm from "../../components/addUserForm/addUserForm";
 
 const Admin = () => {
@@ -12,6 +19,8 @@ const Admin = () => {
   const errorMsg = useSelector((state) => state.users.error);
 
   const [isDialogOpen, setDialogOpen] = useState(false);
+  const [confirmDialog, setConfirmDialog] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState(null);
 
   const handleDialogOpen = () => {
     setDialogOpen(true);
@@ -26,9 +35,23 @@ const Admin = () => {
       await dispatch(addUser(userData));
       // Fetch users again to update the store
       dispatch(fetchUsers());
+      setDialogOpen(false); // Close the add user dialog after successful addition
     } catch (error) {
-      console.error('Failed to add user:', error);
+      console.error("Failed to add user:", error);
     }
+  };
+
+  const handleDeleteUser = () => {
+    setConfirmDialog(false);
+    if (selectedUserId) {
+      dispatch(deleteUser(selectedUserId));
+      setSelectedUserId(null);
+    }
+  };
+
+  const handleDeleteClick = (userId) => {
+    setSelectedUserId(userId);
+    setConfirmDialog(true);
   };
 
   useEffect(() => {
@@ -39,6 +62,20 @@ const Admin = () => {
     { field: "id", headerName: "ID", width: 70 },
     { field: "name", headerName: "Name", width: 200 },
     { field: "email", headerName: "Email", width: 250 },
+    {
+      field: "actions",
+      headerName: "Actions",
+      width: 150,
+      renderCell: (params) => (
+        <Button
+          variant="outlined"
+          color="secondary"
+          onClick={() => handleDeleteClick(params.row._id)}
+        >
+          Delete
+        </Button>
+      ),
+    },
   ];
 
   const usersWithId = users
@@ -58,12 +95,34 @@ const Admin = () => {
 
   return (
     <div style={{ height: "100%", width: "100%" }}>
-       <Button variant="contained" className="add-button" onClick={handleDialogOpen}>Add User</Button>
+      <Button
+        variant="contained"
+        className="add-button"
+        onClick={handleDialogOpen}
+      >
+        Add User
+      </Button>
       <Dialog open={isDialogOpen} onClose={handleDialogClose}>
-        <AddUserForm
-          onAddUser={handleAddUser}
-          onClose={handleDialogClose}
-        />
+        <AddUserForm onAddUser={handleAddUser} onClose={handleDialogClose} />
+      </Dialog>
+      <Dialog
+        open={confirmDialog}
+        onClose={()=>setConfirmDialog(false)}
+      >
+        <DialogTitle id="alert-dialog-title">{"Delete User"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you want to delete this user?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={()=>setConfirmDialog(false)} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleDeleteUser} color="secondary" autoFocus>
+            Delete
+          </Button>
+        </DialogActions>
       </Dialog>
       <DataGrid
         rows={usersWithId}

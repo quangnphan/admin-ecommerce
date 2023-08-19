@@ -15,6 +15,14 @@ export const fetchProducts = createAsyncThunk(
   }
 );
 
+export const addProduct = createAsyncThunk(
+  "products/addProduct",
+  async (params) => {
+    const response = await apiClient.post("user/products", params);
+    return response.data;
+  }
+);
+
 export const updateProduct = createAsyncThunk(
   "products/updateProduct",
   async ({ id, editedProduct }) => {
@@ -48,6 +56,13 @@ const productsSlice = createSlice({
         state.products = action.payload.products; // Set the fetched products array
       })
       .addCase(fetchProducts.rejected, (state, action) => {
+        state.status = "error";
+        state.error = action.error.message;
+      })
+      .addCase(addProduct.fulfilled, (state, action) => {
+        state.status = "succeeded";
+      })
+      .addCase(addProduct.rejected, (state, action) => {
         state.status = "error";
         state.error = action.error.message;
       })
