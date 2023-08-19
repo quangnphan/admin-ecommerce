@@ -93,6 +93,17 @@ const EditDialog = ({ field, open, onClose, onSave }) => {
       const updatedFieldsList = { ...editedFieldsList };
       updatedFieldsList[name] = value;
       setEditedFieldsList(updatedFieldsList);
+    } else if (fieldPath[0] === "description" || fieldPath[0] === "images") {
+      const arrayIndex = parseInt(fieldPath[1]);
+      const updatedFieldsList = { ...editedFieldsList }; // Create a shallow copy
+      const fieldValue = Array.isArray(updatedFieldsList[fieldPath[0]])
+        ? [...updatedFieldsList[fieldPath[0]]] // Create a shallow copy of the array
+        : updatedFieldsList[fieldPath[0]]; // For non-array fields
+    
+      fieldValue[arrayIndex] = value;
+      updatedFieldsList[fieldPath[0]] = fieldValue;
+  
+      setEditedFieldsList(updatedFieldsList);
     } else {
       // Handle other top-level fields
       setEditedFieldsList((prevFields) => ({
@@ -109,9 +120,6 @@ const EditDialog = ({ field, open, onClose, onSave }) => {
       const value = editedFieldsList[key];
       if (Array.isArray(value)) {
         updatedFields[key] = value.filter((item) => item !== "");
-      } else if (key === "description" || key === "images") {
-        // Split comma-separated strings into arrays for description and images fields
-        updatedFields[key] = value.split(",");
       } else {
         updatedFields[key] = value;
       }
@@ -436,83 +444,37 @@ const EditDialog = ({ field, open, onClose, onSave }) => {
     return null;
   };
 
-  const renderImages = (images) => {
-    const isEditing = fieldToEdit === "images";
-    const value = isEditing ? editedFieldsList["images"] : images;
-
-    return (
-      <div style={{ marginBottom: "8px" }}>
-        {isEditing ? (
-          <div style={{ marginTop: "8px" }}>
-            <TextField
-              fullWidth
-              variant="outlined"
-              name="images"
-              value={Array.isArray(value) ? value.join(", ") : value}
-              onChange={handleInputChange}
-              style={{ marginBottom: "8px" }}
-            />
-            <Button variant="contained" color="primary" onClick={handleSave}>
-              Save
-            </Button>
-            <Button
-              variant="outlined"
-              onClick={handleCloseDialog}
-              style={{ marginLeft: "8px" }}
-            >
-              Cancel
-            </Button>
-          </div>
-        ) : (
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <div style={valueStyle}>
-              {Array.isArray(value) ? (
-                <ul>
-                  {value.map((item, index) => (
-                    <li key={index}>{item}</li>
-                  ))}
-                </ul>
-              ) : (
-                value
-              )}
-            </div>
-            {fieldToEdit !== null && (
-              <Button variant="text" disabled style={{ marginLeft: "16px" }}>
-                Edit
-              </Button>
-            )}
-            {fieldToEdit === null && (
-              <Button
-                variant="text"
-                color="primary"
-                style={{ marginLeft: "16px" }}
-                onClick={() => handleEditField("images")}
-              >
-                Edit
-              </Button>
-            )}
-          </div>
-        )}
-      </div>
-    );
-  };
-
   const renderDescription = (description) => {
     const isEditing = fieldToEdit === "description";
     const value = isEditing ? editedFieldsList["description"] : description;
-
+  
     return (
       <div style={{ marginBottom: "8px" }}>
         {isEditing ? (
           <div style={{ marginTop: "8px" }}>
-            <TextField
-              fullWidth
-              variant="outlined"
-              name="description"
-              value={Array.isArray(value) ? value.join(", ") : value}
-              onChange={handleInputChange}
-              style={{ marginBottom: "8px" }}
-            />
+            {Array.isArray(value) ? (
+              value.map((item, index) => (
+                <div key={index}>
+                  <TextField
+                    fullWidth
+                    variant="outlined"
+                    name={`description.${index}`}
+                    value={item}
+                    onChange={handleInputChange}
+                    style={{ marginBottom: "8px" }}
+                  />
+                </div>
+              ))
+            ) : (
+              <TextField
+                fullWidth
+                variant="outlined"
+                name="description"
+                value={value}
+                onChange={handleInputChange}
+                style={{ marginBottom: "8px" }}
+              />
+            )}
             <Button variant="contained" color="primary" onClick={handleSave}>
               Save
             </Button>
@@ -557,6 +519,83 @@ const EditDialog = ({ field, open, onClose, onSave }) => {
       </div>
     );
   };
+  
+  const renderImages = (images) => {
+    const isEditing = fieldToEdit === "images";
+    const value = isEditing ? editedFieldsList["images"] : images;
+  
+    return (
+      <div style={{ marginBottom: "8px" }}>
+        {isEditing ? (
+          <div style={{ marginTop: "8px" }}>
+            {Array.isArray(value) ? (
+              value.map((item, index) => (
+                <div key={index}>
+                  <TextField
+                    fullWidth
+                    variant="outlined"
+                    name={`images.${index}`}
+                    value={item}
+                    onChange={handleInputChange}
+                    style={{ marginBottom: "8px" }}
+                  />
+                </div>
+              ))
+            ) : (
+              <TextField
+                fullWidth
+                variant="outlined"
+                name="images"
+                value={value}
+                onChange={handleInputChange}
+                style={{ marginBottom: "8px" }}
+              />
+            )}
+            <Button variant="contained" color="primary" onClick={handleSave}>
+              Save
+            </Button>
+            <Button
+              variant="outlined"
+              onClick={handleCloseDialog}
+              style={{ marginLeft: "8px" }}
+            >
+              Cancel
+            </Button>
+          </div>
+        ) : (
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <div style={valueStyle}>
+              {Array.isArray(value) ? (
+                <ul>
+                  {value.map((item, index) => (
+                    <li key={index}>{item}</li>
+                  ))}
+                </ul>
+              ) : (
+                value
+              )}
+            </div>
+            {fieldToEdit !== null && (
+              <Button variant="text" disabled style={{ marginLeft: "16px" }}>
+                Edit
+              </Button>
+            )}
+            {fieldToEdit === null && (
+              <Button
+                variant="text"
+                color="primary"
+                style={{ marginLeft: "16px" }}
+                onClick={() => handleEditField("images")}
+              >
+                Edit
+              </Button>
+            )}
+          </div>
+        )}
+      </div>
+    );
+  };
+  
 
   const renderOutOfStock = () => {
     const fieldName = "out_of_stock";
