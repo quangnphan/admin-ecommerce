@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import {
   Dialog,
   DialogTitle,
@@ -13,8 +13,10 @@ import {
   MenuItem,
 } from "@mui/material";
 import apiClient from "../../features/api/api";
+import { addProduct, fetchProducts } from "../../features/products/productsSlice";
 
 const AddProductForm = ({ addDialog, setAddDialog }) => {
+  const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.login.user);
   const [categories, setCategories] = useState([]);
 
@@ -52,9 +54,9 @@ const AddProductForm = ({ addDialog, setAddDialog }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Dispatch an action to send the formData to the server
-    // dispatch(addProduct(formData));
+    dispatch(addProduct(formData));
     setAddDialog(false);
+    dispatch(fetchProducts());
   };
 
   // fetching categories
