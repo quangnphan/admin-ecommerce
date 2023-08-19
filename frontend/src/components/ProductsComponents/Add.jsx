@@ -227,6 +227,7 @@ const AddProductForm = ({ addDialog, setAddDialog }) => {
                     }
                     fullWidth
                     style={{ marginBottom: "10px" }}
+                    type="number"
                   />
                 </div>
               ))}
