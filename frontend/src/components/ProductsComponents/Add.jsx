@@ -44,6 +44,26 @@ const AddProductForm = ({ addDialog, setAddDialog }) => {
     out_of_stock: false,
   });
 
+  const handleClose = () => {
+    setAddDialog(false);
+    setFormData({
+      name: "",
+      category: "",
+      sizes: [
+        {
+          size: "",
+          storages: [{ capacity: "", price: "" }],
+        },
+      ],
+      colors: [{ hex: "", des: "" }],
+      created_by: currentUser?.user?._id,
+      images: [""],
+      in_the_box: [{ item: "", image: "" }],
+      description: [""],
+      out_of_stock: false,
+    })
+  }
+
   const handleFormChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -55,7 +75,7 @@ const AddProductForm = ({ addDialog, setAddDialog }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(addProduct(formData));
-    setAddDialog(false);
+    handleClose();
     dispatch(fetchProducts());
   };
 
@@ -161,7 +181,7 @@ const AddProductForm = ({ addDialog, setAddDialog }) => {
   return (
     <Dialog
       open={addDialog}
-      onClose={() => setAddDialog(false)}
+      onClose={handleClose}
       maxWidth="md"
       fullWidth
     >
@@ -339,7 +359,7 @@ const AddProductForm = ({ addDialog, setAddDialog }) => {
         </form>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => setAddDialog(false)} color="primary">
+        <Button onClick={handleClose} color="primary">
           Cancel
         </Button>
         <Button onClick={handleSubmit} color="primary">
