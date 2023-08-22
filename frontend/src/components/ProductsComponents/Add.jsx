@@ -13,11 +13,15 @@ import {
   MenuItem,
 } from "@mui/material";
 import apiClient from "../../features/api/api";
-import { addProduct, fetchProducts } from "../../features/products/productsSlice";
+import {
+  addProduct,
+  fetchProducts,
+} from "../../features/products/productsSlice";
 
 const AddProductForm = ({ addDialog, setAddDialog }) => {
   const dispatch = useDispatch();
   const currentUser = useSelector((state) => state.login.user);
+  const userId = currentUser?.user?._id || localStorage.getItem("userId");
   const [categories, setCategories] = useState([]);
 
   // Fetch categories when the dialog opens
@@ -26,6 +30,17 @@ const AddProductForm = ({ addDialog, setAddDialog }) => {
       fetchCategories();
     }
   }, [addDialog]);
+
+  const [formErrors, setFormErrors] = useState({
+    name: false,
+    category: false,
+    sizes: false,
+    colors: false,
+    images: false,
+    in_the_box: false,
+    description: false,
+    out_of_stock: false,
+  });
 
   const [formData, setFormData] = useState({
     name: "",
@@ -37,7 +52,7 @@ const AddProductForm = ({ addDialog, setAddDialog }) => {
       },
     ],
     colors: [{ hex: "", des: "" }],
-    created_by: currentUser?.user?._id,
+    created_by: userId,
     images: [""],
     in_the_box: [{ item: "", image: "" }],
     description: [""],
@@ -56,13 +71,23 @@ const AddProductForm = ({ addDialog, setAddDialog }) => {
         },
       ],
       colors: [{ hex: "", des: "" }],
-      created_by: currentUser?.user?._id,
+      created_by: userId,
       images: [""],
       in_the_box: [{ item: "", image: "" }],
       description: [""],
       out_of_stock: false,
-    })
-  }
+    });
+    setFormErrors({
+      name: false,
+      category: false,
+      sizes: false,
+      colors: false,
+      images: false,
+      in_the_box: false,
+      description: false,
+      out_of_stock: false,
+    });
+  };
 
   const handleFormChange = (e) => {
     const { name, value } = e.target;
@@ -72,11 +97,79 @@ const AddProductForm = ({ addDialog, setAddDialog }) => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  //check for empty or null
+  const isFormDataValid = () => {
+    const updatedErrors = { ...formErrors };
+    let isValid = true;
+
+    for (const key in formData) {
+      const value = formData[key];
+
+      if (key !== "created_by") {
+        if (
+          (Array.isArray(value) && !value.length) ||
+          (typeof value === "string" && value.trim() === "") ||
+          (typeof value === "object" &&
+            Object.values(value).every(
+              (item) => typeof item === "string" && item.trim() === ""
+            ))
+        ) {
+          updatedErrors[key] = true;
+          isValid = false;
+        } else {
+          updatedErrors[key] = false;
+        }
+
+        if (key === "in_the_box" || key === "colors") {
+          // Handle nested arrays (in_the_box, colors)
+          for (const subField of value) {
+            if (
+              (Array.isArray(subField) && !subField.length) ||
+              (typeof subField === "object" &&
+                Object.values(subField).some(
+                  (item) => typeof item === "string" && item.trim() === ""
+                ))
+            ) {
+              updatedErrors[key] = true;
+              isValid = false;
+              break; // Break out of the loop if any subfield is invalid
+            }
+          }
+        }
+
+        if (key === "sizes") {
+          for (const size of value) {
+            if (
+              (typeof size.size === "string" && size.size.trim() === "") ||
+              size.storages.some(
+                (storage) =>
+                  (typeof storage.capacity === "string" &&
+                    storage.capacity.trim() === "") ||
+                  (typeof storage.price === "string" &&
+                    storage.price.trim() === "")
+              )
+            ) {
+              updatedErrors[key] = true;
+              isValid = false;
+              break; // Break out of the loop if any size or storage is invalid
+            }
+          }
+        }
+      }
+    }
+
+    setFormErrors(updatedErrors);
+    return isValid;
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(addProduct(formData));
+    if (!isFormDataValid()) {
+      return;
+    }
+    await dispatch(addProduct(formData)); // Wait for the addProduct action to complete
+    await dispatch(fetchProducts()); // Wait for the fetchProducts action to complete
     handleClose();
-    dispatch(fetchProducts());
   };
 
   // fetching categories
@@ -179,12 +272,7 @@ const AddProductForm = ({ addDialog, setAddDialog }) => {
   };
 
   return (
-    <Dialog
-      open={addDialog}
-      onClose={handleClose}
-      maxWidth="md"
-      fullWidth
-    >
+    <Dialog open={addDialog} onClose={handleClose} maxWidth="md" fullWidth>
       <DialogTitle>Add New Product</DialogTitle>
       <DialogContent style={{ minWidth: "400px" }}>
         <form onSubmit={handleSubmit}>
@@ -194,8 +282,9 @@ const AddProductForm = ({ addDialog, setAddDialog }) => {
             value={formData.name}
             onChange={handleFormChange}
             fullWidth
+            error={formErrors.name}
           />
-          <FormControl fullWidth>
+          <FormControl fullWidth error={formErrors.category}>
             <InputLabel>Category</InputLabel>
             <Select
               name="category"
@@ -219,6 +308,7 @@ const AddProductForm = ({ addDialog, setAddDialog }) => {
                 onChange={(e) => handleSizeChange(e, sizeIndex, "size")}
                 fullWidth
                 style={{ marginBottom: "10px" }}
+                error={formErrors.sizes}
               />
 
               {size.storages.map((storage, storageIndex) => (
@@ -237,6 +327,7 @@ const AddProductForm = ({ addDialog, setAddDialog }) => {
                     }
                     fullWidth
                     style={{ marginBottom: "10px" }}
+                    error={formErrors.sizes}
                   />
                   <TextField
                     label="Price"
@@ -248,6 +339,7 @@ const AddProductForm = ({ addDialog, setAddDialog }) => {
                     fullWidth
                     style={{ marginBottom: "10px" }}
                     type="number"
+                    error={formErrors.sizes}
                   />
                 </div>
               ))}
@@ -271,6 +363,7 @@ const AddProductForm = ({ addDialog, setAddDialog }) => {
                 onChange={(e) => handleColorChange(e, colorIndex, "hex")}
                 fullWidth
                 style={{ marginBottom: "10px" }}
+                error={formErrors.colors}
               />
               <TextField
                 label="Color Description"
@@ -279,6 +372,7 @@ const AddProductForm = ({ addDialog, setAddDialog }) => {
                 onChange={(e) => handleColorChange(e, colorIndex, "des")}
                 fullWidth
                 style={{ marginBottom: "10px" }}
+                error={formErrors.colors}
               />
             </div>
           ))}
@@ -297,6 +391,7 @@ const AddProductForm = ({ addDialog, setAddDialog }) => {
               onChange={(e) => handleImageChange(e, imgIndex)}
               fullWidth
               style={{ marginBottom: "10px" }}
+              error={formErrors.images}
             />
           ))}
           <button type="button" onClick={handleAddImage}>
@@ -313,6 +408,7 @@ const AddProductForm = ({ addDialog, setAddDialog }) => {
                 onChange={(e) => handleInTheBoxItemChange(e, itemIndex)}
                 fullWidth
                 style={{ marginBottom: "10px" }}
+                error={formErrors.in_the_box}
               />
               <TextField
                 label="Image URL"
@@ -321,6 +417,7 @@ const AddProductForm = ({ addDialog, setAddDialog }) => {
                 onChange={(e) => handleInTheBoxImageChange(e, itemIndex)}
                 fullWidth
                 style={{ marginBottom: "10px" }}
+                error={formErrors.in_the_box}
               />
             </div>
           ))}
@@ -338,6 +435,7 @@ const AddProductForm = ({ addDialog, setAddDialog }) => {
               onChange={(e) => handleDescriptionChange(e, descIndex)}
               fullWidth
               style={{ marginBottom: "10px" }}
+              error={formErrors.description}
             />
           ))}
           <button type="button" onClick={handleAddDescription}>

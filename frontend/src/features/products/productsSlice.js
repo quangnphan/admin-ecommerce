@@ -53,13 +53,13 @@ const productsSlice = createSlice({
       })
       .addCase(fetchProducts.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.products = action.payload.products; // Set the fetched products array
+        state.products = action.payload.products;
       })
       .addCase(fetchProducts.rejected, (state, action) => {
         state.status = "error";
         state.error = action.error.message;
       })
-      .addCase(addProduct.fulfilled, (state, action) => {
+      .addCase(addProduct.fulfilled, (state) => {
         state.status = "succeeded";
       })
       .addCase(addProduct.rejected, (state, action) => {

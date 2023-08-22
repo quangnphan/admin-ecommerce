@@ -71,7 +71,7 @@ const Products = () => {
     ? products.map((product, index) => ({
         ...product,
         id: index + 1, // generate an index-based id
-        category: product.category.name,
+        category: product?.category?.name,
         created_by: product?.created_by?.name || "N/A",
         created_at: new Date(product.created_at).toLocaleDateString("en-US"),
         price: getLowestPrice(product),
