@@ -16,6 +16,7 @@ export const loginUser = (credentials) => async (dispatch) => {
       const { token, user } = response.data;
       localStorage.setItem("token", token);
       localStorage.setItem("username", user.name);
+      localStorage.setItem("userId", user._id);
       dispatch(loginSuccess(response.data));
     }
   } catch (error) {
