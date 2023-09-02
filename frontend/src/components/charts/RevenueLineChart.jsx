@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -8,10 +7,10 @@ import {
   LinearScale,
   Title,
 } from "chart.js";
+import { CircularProgress } from "@mui/material";
 ChartJS.register(LineElement, PointElement, LinearScale, Title);
 
-const RevenueLineChart = () => {
-  const orders = useSelector((state) => state.orders.orders);
+const RevenueLineChart = ({ orders }) => {
   const [monthlyRevenueData, setMonthlyRevenueData] = useState([]);
 
   useEffect(() => {
@@ -55,30 +54,32 @@ const RevenueLineChart = () => {
     <div>
       <h2>Monthly Revenue</h2>
       {monthlyRevenueData.labels && monthlyRevenueData.labels.length > 0 ? (
-        <Line
-          data={monthlyRevenueData}
-          options={{
-            responsive: true,
-            scales: {
-              x: {
-                type: "category",
-                title: {
-                  display: true,
-                  text: "Month",
+        <div style={{ maxHeight: "400px" }}>
+          <Line
+            data={monthlyRevenueData}
+            options={{
+              responsive: true,
+              scales: {
+                x: {
+                  type: "category",
+                  title: {
+                    display: true,
+                    text: "Month",
+                  },
+                },
+                y: {
+                  beginAtZero: true,
+                  title: {
+                    display: true,
+                    text: "Revenue",
+                  },
                 },
               },
-              y: {
-                beginAtZero: true,
-                title: {
-                  display: true,
-                  text: "Revenue",
-                },
-              },
-            },
-          }}
-        />
+            }}
+          />
+        </div>
       ) : (
-        <p>Loading...</p>
+        <CircularProgress />
       )}
     </div>
   );

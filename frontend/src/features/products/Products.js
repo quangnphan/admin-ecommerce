@@ -5,7 +5,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import EditDialog from "../../components/ProductsComponents/Edit";
 import DeleteProductPopup from "../../components/ProductsComponents/Delete";
 import AddProductForm from "../../components/ProductsComponents/Add";
-import { Button } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 
 const Products = () => {
   const dispatch = useDispatch();
@@ -114,11 +114,11 @@ const Products = () => {
   ];
 
   if (status === "loading") {
-    return <div>Loading...</div>;
+    return <CircularProgress />
   }
 
   if (status === "error") {
-    return <div>Error: {errorMsg}</div>;
+    return <div>{errorMsg}</div>;
   }
 
   return (

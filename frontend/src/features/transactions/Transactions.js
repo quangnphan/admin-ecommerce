@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPayments } from "./transactionsSlice"; // Replace with your action creator
+import { CircularProgress } from "@mui/material";
 
 const Transaction = () => {
   const dispatch = useDispatch();
@@ -51,7 +52,7 @@ const Transaction = () => {
   ];
 
   if (status === "loading") {
-    return <div>Loading...</div>;
+    return <CircularProgress />
   }
 
   if (status === "failed") {

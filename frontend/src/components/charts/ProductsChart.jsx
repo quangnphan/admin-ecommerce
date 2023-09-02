@@ -1,12 +1,9 @@
 import React from "react";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
-import { useSelector } from "react-redux";
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const ProductsChart = ({ obj }) => {
-  const orders = useSelector((state) => state.orders.orders);
-
+const ProductsChart = ({ orders }) => {
   // Calculate product frequencies
   const productFrequencies = {};
 
@@ -51,13 +48,9 @@ const ProductsChart = ({ obj }) => {
   return (
     <div>
       <h2>Orders Distribution by Product</h2>
-      {orders.length > 0 ? (
-        <div style={{maxHeight: '400px'}}>
-        <Doughnut data={chartData} options={chartOptions} />
-        </div>
-      ) : (
-        <p>Loading...</p>
-      )}
+      <div style={{maxHeight: '400px'}}>
+      <Doughnut data={chartData} options={chartOptions} />
+      </div>
     </div>
   );
 };
