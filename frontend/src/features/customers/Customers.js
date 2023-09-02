@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCustomers } from "./customersSlice"; // Adjust the import path
+import { CircularProgress } from "@mui/material";
 
 const Customer = () => {
   const dispatch = useDispatch();
@@ -33,7 +34,7 @@ const Customer = () => {
   ];
 
   if (status === "loading") {
-    return <div>Loading...</div>;
+    return <CircularProgress />
   }
 
   if (status === "failed") {

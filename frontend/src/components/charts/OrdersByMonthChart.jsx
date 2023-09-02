@@ -8,12 +8,9 @@ import {
   BarElement,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
-import { useSelector } from "react-redux";
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
-const OrdersByMonthChart = () => {
-  const orders = useSelector((state) => state.orders.orders);
-
+const OrdersByMonthChart = ({orders}) => {
   const months = [
     "Jan",
     "Feb",
@@ -70,11 +67,9 @@ const OrdersByMonthChart = () => {
   return (
     <div>
       <h2>Total Orders by Month</h2>
-      {orders.length > 0 ? (
-        <Bar data={chartData} options={chartOptions} />
-      ) : (
-        <p>Loading...</p>
-      )}
+      <div style={{maxHeight: '400px'}}>
+      <Bar data={chartData} options={chartOptions} />
+      </div>
     </div>
   );
 };

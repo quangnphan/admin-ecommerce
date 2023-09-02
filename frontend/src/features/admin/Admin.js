@@ -9,6 +9,7 @@ import {
   DialogContentText,
   DialogActions,
   Button,
+  CircularProgress,
 } from "@mui/material";
 import AddUserForm from "../../components/addUserForm/addUserForm";
 
@@ -86,7 +87,7 @@ const Admin = () => {
     : [];
 
   if (status === "loading") {
-    return <div>Loading...</div>;
+    return <CircularProgress />
   }
 
   if (status === "failed") {

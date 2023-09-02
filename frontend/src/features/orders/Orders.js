@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchOrders } from "./ordersSlice";
+import { CircularProgress } from "@mui/material";
 
 const Order = () => {
   const dispatch = useDispatch();
@@ -72,7 +73,7 @@ const Order = () => {
   ];
 
   if (status === "loading") {
-    return <div>Loading...</div>;
+    return <CircularProgress />
   }
 
   if (status === "failed") {
